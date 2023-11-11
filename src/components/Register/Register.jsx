@@ -15,7 +15,8 @@ const Register = () => {
           e.preventDefault();
           const email = e.target.email.value;
           const password = e.target.password.value;
-          console.log(email, password);
+          const accepted = e.target.terms.checked;
+          console.log(email, password, accepted);
 
           // Clear the error
           setRegisterError("");
@@ -29,6 +30,10 @@ const Register = () => {
           }
           else if(!/[A-Z]/.test(password)){
             setRegisterError('Your password must have at least one upper case character')
+            return;
+          }
+          else if(!accepted){
+            setRegisterError('Please accept Our Terms and conditions')
             return;
           }
 
@@ -72,16 +77,20 @@ const Register = () => {
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text">Password</span>
-                    <span onClick={()=>setShowPassword(!showPassword)} className="text-2xl absolute ml-72 mt-20">
-                      {
-                        showPassword ? <AiFillEyeInvisible></AiFillEyeInvisible> :
+                    <span
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="text-2xl absolute ml-72 mt-20"
+                    >
+                      {showPassword ? (
+                        <AiFillEyeInvisible></AiFillEyeInvisible>
+                      ) : (
                         <AiOutlineEye></AiOutlineEye>
-                      }
+                      )}
                     </span>
                   </label>
 
                   <input
-                    type={ showPassword ? "text" : "password"}
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     placeholder="password"
                     className="input input-bordered static"
@@ -91,6 +100,16 @@ const Register = () => {
                     <a href="#" className="label-text-alt link link-hover">
                       Forgot password?
                     </a>
+                  </label>
+                </div>
+                <div className="form-control">
+                  <label className="cursor-pointer label">
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-success"
+                      name="terms"
+                    />
+                    <span className="label-text mr-24"><a href="#"></a>Terms and condition</span>
                   </label>
                 </div>
                 <div className="form-control mt-6">
