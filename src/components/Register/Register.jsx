@@ -1,7 +1,8 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import auth from "../../Firsebase/firebase.config";
 import { AiOutlineEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 
 
@@ -38,11 +39,21 @@ const Register = () => {
           }
 
           //  Create User
-          createUserWithEmailAndPassword(auth, email, password)
+            createUserWithEmailAndPassword(auth, email, password)
             .then((result) => {
               console.log(result.user);
               setSuccess("You have successfully create an account");
+
+              // send a verification email
+              sendEmailVerification(result.user)
+              .then(() => {
+                alert("please check your email and verify it");
+              });
             })
+
+            
+
+
             .catch((error) => {
               console.error(error);
               setRegisterError(error.message);
@@ -96,11 +107,7 @@ const Register = () => {
                     className="input input-bordered static"
                     required
                   />
-                  <label className="label">
-                    <a href="#" className="label-text-alt link link-hover">
-                      Forgot password?
-                    </a>
-                  </label>
+                  
                 </div>
                 <div className="form-control">
                   <label className="cursor-pointer label">
@@ -109,16 +116,27 @@ const Register = () => {
                       className="checkbox checkbox-success"
                       name="terms"
                     />
-                    <span className="label-text mr-24"><a href="#"></a>Terms and condition</span>
+                    <span className="label-text mr-24">
+                      <a href="#"></a>Terms and condition
+                    </span>
                   </label>
                 </div>
                 <div className="form-control mt-6">
                   <button className="btn btn-primary">Register</button>
                 </div>
+                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                  Already have account?{" "}
+                  <Link
+                    to={"/login"}
+                    href="#"
+                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  >
+                    Login
+                  </Link>
+                </p>
                 {registerError && (
                   <p className="text-2xl text-red-900">{registerError}</p>
                 )}
-                ,
                 {success && (
                   <div>
                     <h2 className="text-2xl text-green-800">{success}</h2>
